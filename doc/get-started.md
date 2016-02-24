@@ -51,19 +51,19 @@ Each element can override the default _enter_ and _leave_ animations.
 <div class="au-animate" anim-enter="some-enter-effect" anim-leave="some-leave-effect">Customized</div>
 ```
 
-# Create an effect on the element 
+### Create an effect on the element 
 ```html
 <!-- make a custom fade animation for this element -->
 <div class="au-animate" anim-enter="{ duration: 1.5, from: { opacity: 0 }, to: { opacity: .6 } }">Faded</div>
 ```
 
-# Modify registered effects for an element
+### Modify registered effects for an element
 ```html
 <!-- modified effects: extend duration to 5 seconds -->
 <div class="au-animate" anim-enter="{ duration: 5, effect: 'fade-in' }">Modified</div>
 ```
 
-# Chain effects into a sequence of animations.
+### Chain effects into a sequence of animations.
 _These will be executed sequentially_
 ```html
 <!-- sequence of effects -->
@@ -79,7 +79,7 @@ All of these methods of customizing effects can be combined.
 <div class="au-animate" anim-enter="{ duration: 3, effect: ['fade-in','wobble'] }">3 seconds-ish</div>  
 ```
 
-# Staggered animations
+## Staggered animations
 
 In [Aurelia](http://aurelia.io) a group of animated elements can be staggered by adding _au-stagger_ to the parent element. The default stagger delay can be set as shown in the config section, or modified as needed with the `stagger-delay` attribute.
 
