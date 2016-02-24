@@ -8,7 +8,6 @@ System.config({
     ]
   },
   paths: {
-    "aurelia-animator-greensock/*": "dist\\system/*.js",
     "github:*": "jspm_packages/github/*",
     "npm:*": "jspm_packages/npm/*"
   },
