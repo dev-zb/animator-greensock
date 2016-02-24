@@ -1,4 +1,4 @@
-// 1.1.4
+// Beta.1
 let extendedEffects = new Map([
                     ['reset-rot', { set: { transformOrigin: 'center center', rotationX: 0, rotationY: 0, rotationZ: 0 }}],
                     ['reset-pos', { set: { x: 0, y: 0, z: 0 }}],

@@ -1,6 +1,6 @@
 {
   "name": "animator-greensock",
-  "version": "1.0.0-beta.1.1.4",
+  "version": "1.0.0-beta.1",
   "description": "An implementation of the Animator interface using GSAP.",
   "keywords": [
     "aurelia",
