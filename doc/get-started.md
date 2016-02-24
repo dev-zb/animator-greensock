@@ -117,7 +117,7 @@ animator.animate( element, { duration: 1, opacity: 0 } );
 animator.animate( element, { duration: 1, from: { opacity: 0 }} );
 ```  
 
-The outter most properties take precedent when modifying registered effects, so if a property is modified mulitple times only the final value is used.
+The outter most properties take precedence when modifying registered effects, so if a property is modified mulitple times only the final value is used.
 
 `{ duration: .5, effect: { duration: 3, effect: 'fade-in' }}`
 
