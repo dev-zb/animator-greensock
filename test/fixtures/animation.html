@@ -1,0 +1,39 @@
+<style type="text/css">
+  section.au-animate {
+    opacity: 0;
+  }
+  
+  #test-parallel > .animate-selector { opacity: 0; }
+</style>
+
+<div id="animation">
+
+  <div id="test-simple" class="au-animate">Simple</div>
+
+  <div id="test-stagger" class="au-stagger">
+    <div class="au-animate">stagger</div>
+    <div class="au-animate">stagger</div>
+    <div class="au-animate">stagger</div>
+    <div class="au-animate">stagger</div>
+  </div>
+  
+  <div id="test-stagger-enter" class="au-stagger-enter">
+    <div class="au-animate">stagger-enter</div>
+    <div class="au-animate">stagger-enter</div>
+    <div class="au-animate">stagger-enter</div>
+    <div class="au-animate">stagger-enter</div>
+  </div>
+  
+  <div id="test-stagger-leave" class="au-stagger-leave">
+    <div class="au-animate">stagger-leave</div>
+    <div class="au-animate">stagger-leave</div>
+    <div class="au-animate">stagger-leave</div>
+    <div class="au-animate">stagger-leave</div>
+  </div>
+
+  <div id="test-sequence">
+    <div>sequence</div>
+    <div>sequence</div>
+    <div>sequence</div>
+  </div>
+</div>
