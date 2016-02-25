@@ -48,35 +48,35 @@ animator.registerEffect( 'random-effect', () => {
 Each element can override the default _enter_ and _leave_ animations.
 
 ```html
-<div class="au-animate" anim-enter="some-enter-effect" anim-leave="some-leave-effect">Customized</div>
+<div class="au-animate" au-enter="some-enter-effect" au-leave="some-leave-effect">Customized</div>
 ```
 
 ### Create an effect on the element 
 ```html
 <!-- make a custom fade animation for this element -->
-<div class="au-animate" anim-enter="{ duration: 1.5, from: { opacity: 0 }, to: { opacity: .6 } }">Faded</div>
+<div class="au-animate" au-enter="{ duration: 1.5, from: { opacity: 0 }, to: { opacity: .6 } }">Faded</div>
 ```
 
 ### Modify registered effects for an element
 ```html
 <!-- modified effects: extend duration to 5 seconds -->
-<div class="au-animate" anim-enter="{ duration: 5, effect: 'fade-in' }">Modified</div>
+<div class="au-animate" au-enter="{ duration: 5, effect: 'fade-in' }">Modified</div>
 ```
 
 ### Chain effects into a sequence of animations.
 _These will be executed sequentially_
 ```html
 <!-- sequence of effects -->
-<div class="au-animate" anim-enter="fade-in;wobble">Sequence</div>
+<div class="au-animate" au-enter="fade-in;wobble">Sequence</div>
 ```
 
 All of these methods of customizing effects can be combined.
 ```html
 <!-- chain registered, modified registered and local custom animations !-->
-<div class="au-animate" anim-enter="fade-in;{ duration: 3, effect: 'wobble' };{ duration: 1, to: { x: '+=20' } }">Mix</div>
+<div class="au-animate" au-enter="fade-in;{ duration: 3, effect: 'wobble' };{ duration: 1, to: { x: '+=20' } }">Mix</div>
 
 <!-- create a sequence of animations and set the total duration -->
-<div class="au-animate" anim-enter="{ duration: 3, effect: ['fade-in','wobble'] }">3 seconds-ish</div>  
+<div class="au-animate" au-enter="{ duration: 3, effect: ['fade-in','wobble'] }">3 seconds-ish</div>  
 ```
 
 ## Staggered animations
@@ -85,7 +85,7 @@ In [Aurelia](http://aurelia.io) a group of animated elements can be staggered by
 
 ```html
 <!-- stagger the elements by 1 second -->
-<div class="au-stagger" stagger-delay="1">
+<div class="au-stagger" au-stagger="1">
     <div class="au-animate">X</div>
     <div class="au-animate">X</div>
     <div class="au-animate">X</div>
