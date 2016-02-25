@@ -1,3 +1,9 @@
+## 1.0.0-Beta.4 (2016-02-25)
+
+### Bug Fixes
+
+* **runElementAnimation:** stagger attribute value applied properly 
+
 ## 1.0.0-Beta.3 (2016-02-25)
 
 ### 

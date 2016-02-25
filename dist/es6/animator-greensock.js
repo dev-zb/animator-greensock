@@ -791,10 +791,10 @@ export class GreensockAnimator
         {
             let delay = _options.delay || 0;
             let elem_pos = Array.prototype.indexOf.call(parent.children, element);
-            let stagger = parent.getAttribute('stagger-delay');
+            let stagger = parent.getAttribute('au-stagger');
             if ( stagger === null || stagger === '' ) { stagger = this.defaultStagger; }
             
-            _options.delay = delay + (stagger * elem_pos);
+            _options.delay = delay + (+stagger * elem_pos);
             
             this._triggerDOMEvent(animationEvent.staggerNext, element);
         }
@@ -803,7 +803,6 @@ export class GreensockAnimator
         this._parseAttributes(element, eventName);
 
         if (eventName) { this._triggerDOMEvent(animationEvent[eventName + 'Begin']); }
-        this.isAnimating = true;
         
         _options.onStartParams = [element, eventName, _options.onStart, _options.onStartParams, _options.onStartScope];
         _options.onStartScope = this;
@@ -830,7 +829,7 @@ export class GreensockAnimator
         for (i = 0, l = element.length; i < l; i++) 
         {
             el = element[i];
-            eventAnim = el.getAttribute('anim-' + eventName );
+            eventAnim = el.getAttribute('au-' + eventName );
 
             el.animations = el.animations || {};
             el.animstrings = el.animstrings || {};
