@@ -15,6 +15,8 @@ declare module 'animator-greensock' {
     defaults: any;
     timelineDefaults: any;
     defaultStagger: any;
+    
+    //  50ms
     isAnimating: any;
     effects: any;
     
@@ -132,7 +134,7 @@ declare module 'animator-greensock' {
     
     /**
          * Run the enter animation on an element
-         * @param element Element to stop animating
+         * @param element Element to animate
          * @return resolved when animation is complete
          */
     enter(element: any, effectName?: any, options?: any): any;

@@ -1,3 +1,8 @@
+## 1.0.0-Beta.2 (2016-02-24)
+
+### Refactor
+* **enter/leave:** consolidate stagger code. 
+
 ## 1.0.0-Beta.1 (2016-02-23)
 
 ### Features

@@ -33,7 +33,7 @@ define(['exports', 'greensock', 'aurelia-templating', 'aurelia-pal', 'aurelia-bi
                 repeat: 0,
                 repeatDelay: 0
             };
-            this.defaultStagger = 0.02;
+            this.defaultStagger = 0.05;
             this.isAnimating = false;
             this.effects = new Map(extendedEffects);
 
@@ -410,13 +410,12 @@ define(['exports', 'greensock', 'aurelia-templating', 'aurelia-pal', 'aurelia-bi
             var _this4 = this;
 
             this._triggerDOMEvent(_aureliaTemplating.animationEvent[mode + 'ClassBegin'], element);
+            this._triggerDOMEvent(_aureliaTemplating.animationEvent[mode + 'ClassActive'], element);
 
             return new Promise(function (resolve) {
-                TweenMax.to(element, .0001, {
+                TweenMax.to(element, 0, {
                     className: method + className,
-                    onStart: function onStart() {
-                        _this4._triggerDOMEvent(_aureliaTemplating.animationEvent[mode + 'ClassActive'], element);
-                    },
+
                     onComplete: function onComplete() {
                         _this4._triggerDOMEvent(_aureliaTemplating.animationEvent[mode + 'ClassDone'], element);
                         resolve(true);
@@ -433,32 +432,10 @@ define(['exports', 'greensock', 'aurelia-templating', 'aurelia-pal', 'aurelia-bi
             return this._modClass(element, className, 'add', '+=');
         };
 
-        GreensockAnimator.prototype._getStagger = function _getStagger(element, options) {
-            var action = arguments.length <= 2 || arguments[2] === undefined ? '' : arguments[2];
-
-            var parent = element.parentElement;
-
-            if (parent && (parent.classList.contains('au-stagger') || parent.classList.contains('au-stagger-' + action))) {
-                var delay = options.delay || 0;
-                var elem_pos = Array.prototype.indexOf.call(parent.children, element);
-                var stagger = parent.getAttribute('stagger-delay');
-                if (stagger === null || stagger === '') {
-                    stagger = this.defaultStagger;
-                }
-
-                options.delay = delay + stagger * elem_pos;
-
-                this._triggerDOMEvent(_aureliaTemplating.animationEvent.staggerNext, element);
-            }
-
-            return options;
-        };
-
         GreensockAnimator.prototype.enter = function enter(element) {
             var effectName = arguments.length <= 1 || arguments[1] === undefined ? 'enter' : arguments[1];
             var options = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
 
-            options = this._getStagger(element, options, 'enter');
             return this._runElementAnimation(element, effectName, options, 'enter');
         };
 
@@ -466,7 +443,6 @@ define(['exports', 'greensock', 'aurelia-templating', 'aurelia-pal', 'aurelia-bi
             var effectName = arguments.length <= 1 || arguments[1] === undefined ? 'leave' : arguments[1];
             var options = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
 
-            options = this._getStagger(element, options, 'leave');
             return this._runElementAnimation(element, effectName, options, 'leave');
         };
 
@@ -498,14 +474,28 @@ define(['exports', 'greensock', 'aurelia-templating', 'aurelia-pal', 'aurelia-bi
             if (!element || element.length === 0) {
                 return Promise.resolve(element);
             }
+            var _options = Object.assign({}, options);
+
+            var parent = element.parentElement;
+            if (parent && (parent.classList.contains('au-stagger') || parent.classList.contains('au-stagger-' + eventName))) {
+                var delay = _options.delay || 0;
+                var elem_pos = Array.prototype.indexOf.call(parent.children, element);
+                var stagger = parent.getAttribute('stagger-delay');
+                if (stagger === null || stagger === '') {
+                    stagger = this.defaultStagger;
+                }
+
+                _options.delay = delay + stagger * elem_pos;
+
+                this._triggerDOMEvent(_aureliaTemplating.animationEvent.staggerNext, element);
+            }
 
             this._parseAttributes(element, eventName);
 
             if (eventName) {
                 this._triggerDOMEvent(_aureliaTemplating.animationEvent[eventName + 'Begin']);
             }
-
-            var _options = Object.assign({}, options);
+            this.isAnimating = true;
 
             _options.onStartParams = [element, eventName, _options.onStart, _options.onStartParams, _options.onStartScope];
             _options.onStartScope = this;

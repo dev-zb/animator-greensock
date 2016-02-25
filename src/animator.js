@@ -31,7 +31,7 @@ export class GreensockAnimator
         repeatDelay: 0
     }
 
-    defaultStagger = 0.02;
+    defaultStagger = 0.05;  // 50ms
     isAnimating = false;
 
     effects = new Map(extendedEffects);
@@ -493,12 +493,13 @@ export class GreensockAnimator
     _modClass(element, className, mode, method)
     {
         this._triggerDOMEvent(animationEvent[mode + 'ClassBegin'], element);
+        this._triggerDOMEvent(animationEvent[mode + 'ClassActive'], element);
         
         return new Promise( (resolve) => {
-            TweenMax.to(element, .0001, // to trigger onStart 
+            TweenMax.to(element, 0, // to trigger onStart duration needs to be > 0 
                 {
                     className: method+className,
-                    onStart: () => { this._triggerDOMEvent(animationEvent[mode + 'ClassActive'], element); }, 
+                    //onStart: () => { this._triggerDOMEvent(animationEvent[mode + 'ClassActive'], element); }, 
                     onComplete: () => {
                         this._triggerDOMEvent(animationEvent[mode + 'ClassDone'], element);
                         resolve(true); 
@@ -530,35 +531,12 @@ export class GreensockAnimator
     }
 
     /**
-     * Determine if an element should be staggered (only applies to enter/leave)
-     */
-    _getStagger(element, options, action = '')
-    {
-        let parent = element.parentElement;
-        
-        if ( parent && (parent.classList.contains('au-stagger') || parent.classList.contains(`au-stagger-${action}`)) )
-        {
-            let delay = options.delay || 0;
-            let elem_pos = Array.prototype.indexOf.call(parent.children, element);
-            let stagger = parent.getAttribute('stagger-delay');
-            if ( stagger === null || stagger === '' ) { stagger = this.defaultStagger; }
-            
-            options.delay = delay + (stagger * elem_pos);
-            
-            this._triggerDOMEvent(animationEvent.staggerNext, element);
-        }
-        
-        return options;
-    }
-
-    /**
      * Run the enter animation on an element
-     * @param element Element to stop animating
+     * @param element Element to animate
      * @return resolved when animation is complete
      */
     enter(element, effectName = 'enter', options = {}) 
     {
-        options = this._getStagger(element, options, 'enter');
         return this._runElementAnimation(element, effectName, options, 'enter');
     }
 
@@ -569,7 +547,6 @@ export class GreensockAnimator
      */
     leave(element, effectName = 'leave', options = {}) 
     {
-        options = this._getStagger(element, options, 'leave');
         return this._runElementAnimation(element, effectName, options, 'leave');
     }
 
@@ -587,28 +564,41 @@ export class GreensockAnimator
     */
     _reOnStart(element, eventName, onStart, onStartParams, onStartScope ) 
     {
-            if ( eventName ) { this._triggerDOMEvent(animationEvent[eventName + 'Active'], element); }
-            if ( typeof onStart === 'function' ) { onStart.apply(onStartScope || this, onStartParams); }  
+        if ( eventName ) { this._triggerDOMEvent(animationEvent[eventName + 'Active'], element); }
+        if ( typeof onStart === 'function' ) { onStart.apply(onStartScope || this, onStartParams); }  
     }
     _reOnComplete(element, eventName, onComplete, onCompleteParams, onCompleteScope)
     {
-            this.isAnimating = false;
-            
-            if ( eventName ) { this._triggerDOMEvent(animationEvent[eventName + 'Done'], element); }
-            if ( typeof onComplete === 'function' ) { onComplete.apply(onCompleteScope || this, onCompleteParams); }
-            
-            return true;
+        this.isAnimating = false;
+        
+        if ( eventName ) { this._triggerDOMEvent(animationEvent[eventName + 'Done'], element); }
+        if ( typeof onComplete === 'function' ) { onComplete.apply(onCompleteScope || this, onCompleteParams); }
+        
+        return true;
     }
     _runElementAnimation(element, name, options, eventName = '') 
     {
         if (!element || element.length === 0) { return Promise.resolve(element); }
+        let _options = Object.assign({}, options);
+
+        let parent = element.parentElement;
+        if ( parent && (parent.classList.contains('au-stagger') || parent.classList.contains(`au-stagger-${eventName}`)) )
+        {
+            let delay = _options.delay || 0;
+            let elem_pos = Array.prototype.indexOf.call(parent.children, element);
+            let stagger = parent.getAttribute('stagger-delay');
+            if ( stagger === null || stagger === '' ) { stagger = this.defaultStagger; }
+            
+            _options.delay = delay + (stagger * elem_pos);
+            
+            this._triggerDOMEvent(animationEvent.staggerNext, element);
+        }
 
         /* parse animation properties */
         this._parseAttributes(element, eventName);
 
         if (eventName) { this._triggerDOMEvent(animationEvent[eventName + 'Begin']); }
-
-        let _options = Object.assign({}, options);
+        this.isAnimating = true;
         
         _options.onStartParams = [element, eventName, _options.onStart, _options.onStartParams, _options.onStartScope];
         _options.onStartScope = this;
