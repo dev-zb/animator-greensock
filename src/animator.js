@@ -589,7 +589,7 @@ export class GreensockAnimator
             let stagger = parent.getAttribute('au-stagger');
             if ( stagger === null || stagger === '' ) { stagger = this.defaultStagger; }
             
-            _options.delay = delay + (stagger * elem_pos);
+            _options.delay = delay + (+stagger * elem_pos);
             
             this._triggerDOMEvent(animationEvent.staggerNext, element);
         }
@@ -598,7 +598,6 @@ export class GreensockAnimator
         this._parseAttributes(element, eventName);
 
         if (eventName) { this._triggerDOMEvent(animationEvent[eventName + 'Begin']); }
-        this.isAnimating = true;
         
         _options.onStartParams = [element, eventName, _options.onStart, _options.onStartParams, _options.onStartScope];
         _options.onStartScope = this;
