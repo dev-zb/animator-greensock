@@ -1,3 +1,10 @@
+### 1.0.0-beta.6 (2016-04-17)
+
+#### Bug Fixes
+
+* **effects:** missing gsap import
+
+
 ### 1.0.0-beta.5 (2016-04-17)
 
 * **all:** Update babel and build files. Remove unnecessary dependencies. lint
