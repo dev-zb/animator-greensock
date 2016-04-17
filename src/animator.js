@@ -7,7 +7,7 @@ import {extendedEffects} from './effects';
 /**
  * An implementation of the Animator using Greensock.
  */
-export class GreensockAnimator 
+export class GreensockAnimator
 {
     /**
      * Default options for greensock
@@ -39,16 +39,16 @@ export class GreensockAnimator
     /**
      * Creates an instance of Animator.
      */
-    constructor( container ) 
+    constructor( container )
     {
         this.container = container || DOM;
         this.parser = new Parser();
-        
+
         this.registerEffect('enter', 'fade-in');
         this.registerEffect('leave', 'fade-out');
-    }        
+    }
 
-    _triggerDOMEvent(eventType, element) 
+    _triggerDOMEvent(eventType, element)
     {
         DOM.dispatchEvent( DOM.createCustomEvent(eventType, {bubbles: true, cancelable: true, detail: element}) );
     }
@@ -64,40 +64,40 @@ export class GreensockAnimator
     animate( element, nameOrProps, options = {}, silent = false )
     {
         this.isAnimating = true;
-        return new Promise( (resolve,reject) => {
-            if ( !element ) 
+        return new Promise( (resolve, reject) => {
+            if ( !element )
             {
                 reject(new Error('Invalid element')); return;
             }
-            
-            let [effect,ops] = this.resolveEffectDeep(nameOrProps);
+
+            let [effect, ops] = this.resolveEffectDeep(nameOrProps);
             if ( !effect ) { reject(new Error('Invalid effect.')); return; }
             let _options = Object.assign({}, ops, options);
-            
+
             if ( !silent )
             {
                 this._triggerDOMEvent(animationEvent.animateBegin, element);
             }
-            
+
             _options.onCompleteParams = [element, silent, _options.onComplete, _options.onCompleteParams, _options.onCompleteScope, resolve];
             _options.onCompleteScope = this;
             _options.onComplete = this._animOnComplete;
-            
+
             _options.onStartParams = [element, silent, _options.onStart, _options.onStartParams, _options.onStartScope];
             _options.onStartScope = this;
             _options.onStart = this._animOnStart;
-            
-            if ( effect instanceof Array ) /* effect is a sequence */ 
+
+            if ( effect instanceof Array ) /* effect is a sequence */
             {
                 let sequenceOptions = this._filterSequenceOptions(_options);
                 this.runSequence(effect, element, _options, sequenceOptions);
             }
             else {
-                let tween = this._makeTween(element, effect, _options );
+                this._makeTween(element, effect, _options );
             }
         });
     }
-    _animOnStart(element, silent, onStart, onStartParams, onStartScope) 
+    _animOnStart(element, silent, onStart, onStartParams, onStartScope)
     {
         if ( !silent ) { this._triggerDOMEvent(animationEvent.animateActive, element); }
         if ( onStart ) { onStart.apply(onStartScope, onStartParams || arguments); }
@@ -105,15 +105,15 @@ export class GreensockAnimator
     _animOnComplete(element, silent, onComplete, onCompleteParams, onCompleteScope, resolve)
     {
         this.isAnimating = false;
-        if ( !silent ) 
-        { 
-            this._triggerDOMEvent(animationEvent.animateDone, element); 
+        if ( !silent )
+        {
+            this._triggerDOMEvent(animationEvent.animateDone, element);
         }
         if ( typeof onComplete === 'function' ) { onComplete.apply(onCompleteScope || this, onCompleteParams || arguments); }
-        
+
         resolve(element);
     }
-    
+
     /**
      * Make a guess at which options are meant for the sequence as a whole & separate them.
      * @param options options to filter [WILL BE MODIFIED]
@@ -123,19 +123,19 @@ export class GreensockAnimator
     {
         let sequenceOptions = Object.assign({}, this.timelineDefaults, options);
         delete sequenceOptions.ease;
-        delete options.repeat; 
+        delete options.repeat;
         delete options.repeatDelay;
-        delete options.yoyo; 
+        delete options.yoyo;
         delete options.delay;
         delete options.duration;
         delete options.stagger;
         delete options.align;
         delete options.position;
         delete options.onComplete; delete options.onStart;
-        
+
         return sequenceOptions;
     }
-    
+
     /**
      * Creates the best fit tween based on the properties and options given. Falls back to default
      * @param element the element(s)/selector for the tween
@@ -146,20 +146,19 @@ export class GreensockAnimator
     _makeTween(element, options, overrideOptions)
     {
         element = this._ensureList(element);
-        let props = Object.assign({}, options, overrideOptions);
-
-        let to = props.to,
+        let props = Object.assign({}, options, overrideOptions),
+            to = props.to,
             from = props.from ? Object.assign({}, this.defaults, props.from) : null,
-            set = props.set;
-        let duration = props.duration;
-        let delay = props.delay || 0;
-        
+            set = props.set,
+            duration = props.duration,
+            delay = props.delay || 0;
+
         delete props.to;
         delete props.from;
         delete props.set;
         delete props.duration;
         delete props.delay;
-        
+
         let completeAll = props.onCompleteAll || props.onComplete;
         let completeAllParams = !!completeAll ? props.onCompleteAllParams || props.onCompleteParams : null;
 
@@ -170,15 +169,15 @@ export class GreensockAnimator
         {
             to = Object.assign({}, this.defaults, to, props);
             to.delay += delay;  /* stagger */
-            
-            if ( from ) 
+
+            if ( from )
             {
                 Object.assign(from, set);   /* if set is present it overrides everything. */
                 return TweenMax.staggerFromTo(element, this._duration(duration, to.duration), from, to, props.stagger, completeAll, completeAllParams, this);
             }
-            
+
             Object.assign(to, set);
-            return TweenMax.staggerTo(element, this._duration(duration, to.duration), to, props.stagger, completeAll, completeAllParams, this); 
+            return TweenMax.staggerTo(element, this._duration(duration, to.duration), to, props.stagger, completeAll, completeAllParams, this);
         }
         else
         if ( from )
@@ -189,7 +188,7 @@ export class GreensockAnimator
         }
         else
         if ( set )
-        {       
+        {
             return TweenMax.set(element, set );
         }
         else {
@@ -217,10 +216,10 @@ export class GreensockAnimator
      * @param element Element to animate
      * @return this instance for chaining
      */
-    reverse( element ) 
+    reverse( element )
     {
         TweenMax.getTweensOf(element).forEach( t => t.reverse() );
-        
+
         return this;
     }
 
@@ -229,10 +228,10 @@ export class GreensockAnimator
      * @param element {HTMLElement}   Element to animate
      * @return this instance for chaining
      */
-    rewind( element ) 
+    rewind( element )
     {
         TweenMax.getTweensOf(element).forEach( t => t.restart() );
-        
+
         return this;
     }
 
@@ -243,10 +242,10 @@ export class GreensockAnimator
      * @param props properties for the effect
      * @return this instance for chaining
      */
-    registerEffect( name, props ) 
+    registerEffect( name, props )
     {
         this.effects.set(name, props);
-        
+
         return this;
     }
 
@@ -255,10 +254,10 @@ export class GreensockAnimator
      * @param name name of the effect
      * @return this instance for chaining
      */
-    unregisterEffect( name ) 
+    unregisterEffect( name )
     {
         this.effects.delete(name);
-        
+
         return this;
     }
 
@@ -285,12 +284,12 @@ export class GreensockAnimator
         let last = null;
         while( typeof nameOrEffect === 'string' ) { last = nameOrEffect; nameOrEffect = this.effects.get(nameOrEffect); }
         if ( typeof nameOrEffect === 'function' ) { nameOrEffect = nameOrEffect(); return this.resolveEffect( nameOrEffect, clone); }
-        
-        if ( !nameOrEffect ) 
+
+        if ( !nameOrEffect )
         {
             last = this._parseAttributeValue(last); /* if the string was a parsable effect, not a name. */
             if ( typeof last === 'string' ) { return null; } /* not a valid parsable effect, not a name/alias. */
-            nameOrEffect = last; 
+            nameOrEffect = last;
         }
         return nameOrEffect instanceof Array ? nameOrEffect : (clone ? Object.assign({}, nameOrEffect) : nameOrEffect);
     }
@@ -304,12 +303,12 @@ export class GreensockAnimator
     {
         let options = {};
         effect = this._modifiedEffect( this.resolveEffect( effect, true), options );
-        
+
         return [effect, options];
     }
 
     /**
-     * Copies properties into options if there is a 'sub effect' 
+     * Copies properties into options if there is a 'sub effect'
      * @param effect the effect object to check for sub effect
      * @param options [warn] will be modified with the properties of effect
      * @return effect modified or unmodified. 
@@ -320,7 +319,7 @@ export class GreensockAnimator
         {   
             Object.assign(options, effect);
             delete options.effect;
-            
+
             effect = this.resolveEffect(effect.effect, true);
         }
         return effect;
@@ -334,15 +333,15 @@ export class GreensockAnimator
      * @param options options for the sequence as a whole (stagger, delay, callbacks)
      * @return A promise for sequence completion.
      */
-    runSequence(sequence, element, options = {}, sequenceOptions = {}) 
+    runSequence( sequence, element, options = {}, sequenceOptions = {} )
     {
         return new Promise( (resolve, reject) => {
             this.sequenceReject = reject;
-            
-            try 
+
+            try
             {
                 if ( !arguments.length ) { throw new Error('Empty sequence arguments'); }
-            
+
                 sequence = this.resolveEffect(sequence, true);
                 if ( !sequence || !(sequence instanceof Array) ) { throw new Error('Invalid sequence'); }
                 
@@ -353,36 +352,36 @@ export class GreensockAnimator
                     onStartParams: [element, sequenceOptions.onStart, sequenceOptions.onStartParams, sequenceOptions.onStartScope],
                     onStartScope: this,
                     onStart: this._sequenceOnStart,
-                
+
                     onCompleteParams: [element, sequenceOptions.onComplete, sequenceOptions.onCompleteParams, sequenceOptions.onCompleteScope, resolve],
                     onCompleteScope: this,
                     onComplete: this._sequenceOnComplete
                 });
-                
+
                 delete _options.onComplete;
                 delete _options.onStart;
                 
                 this._makeTimeline(sequence, element, _options, _sequenceOptions);
             } 
-            catch (e) 
+            catch (e)
             {
                 this.stopSequence(sequence);
             }
         });
     }
 
-    _sequenceOnStart(element, onStart, onStartParams, onStartScope)
+    _sequenceOnStart( element, onStart, onStartParams, onStartScope )
     {
         this._triggerDOMEvent(animationEvent.sequenceBegin, element);
         if ( typeof onStart === 'function' ) { onStart.apply( onStartScope || this, onStartParams); }
     }
-    
+
     _sequenceOnComplete( element, onComplete, onCompleteParams, onCompleteScope, resolve)
     {
         this._triggerDOMEvent(animationEvent.sequenceDone, element);
-        
+
         if ( typeof onComplete === 'function' ) { onComplete.apply(onCompleteScope || this, onCompleteParams); }
-        
+
         this.sequenceReject = null;
         resolve(true);
     }
@@ -390,34 +389,34 @@ export class GreensockAnimator
     /**
      * Like runSequence, but returns the GSAP timeline instead of a promise.
      */
-    makeTimeline(sequence, element, elementOptions, timelineOptions )
+    makeTimeline( sequence, element, elementOptions, timelineOptions )
     {
         let [effect, options] = this.resolveEffectDeep(sequence);
-        let tlop = this._filterSequenceOptions(options)
-        
+        let tlop = this._filterSequenceOptions(options);
+
         return this._makeTimeline( effect, element, Object.assign(options, elementOptions), Object.assign(tlop, timelineOptions) );
     }
 
     /**
      * builds a GSAP timeline
      */
-    _makeTimeline(sequence, element, overrideOptions = {}, timelineOptions = {})
+    _makeTimeline( sequence, element, overrideOptions = {}, timelineOptions = {} )
     {
         let requestedPause = timelineOptions.paused;    /* save desired pause state. */
         timelineOptions.paused = true;
         if ( timelineOptions.autoRemoveChildren === undefined ) { timelineOptions.autoRemoveChildren = !timelineOptions.repeat; }
-        let timeline = new TimelineMax(timelineOptions);
+
+        let timeline = new TimelineMax(timelineOptions),
+            tweens = [],
+            stagger = !!timelineOptions.stagger;
 
         sequence = this._ensureList(sequence);
-         
-        let tweens = [];
-        let stagger = !!timelineOptions.stagger;
-        
+
         for( let i = 0, len = sequence.length; i < len; i++ )
         {
             let effect = sequence[i], options;
             let el = effect.element || element; delete effect.element;
-            
+
             [effect, options] = this.resolveEffectDeep( effect );
 
             Object.assign(options, overrideOptions);
@@ -431,24 +430,24 @@ export class GreensockAnimator
                 else {
                     timeline.add(this._makeTimeline(effect, el, options, so), so.position, so.align);
                 }
-            }   
+            }
             else {
                 if ( stagger )
                 {
-                    tweens.push(this._makeTween( el, effect, options));
+                    tweens.push(this._makeTween( el, effect, options ));
                 }
                 else {
                     let position = options.position || effect.position; delete options.position; delete effect.position;
-                    timeline.add(this._makeTween(el, effect, options), position, options.align);
+                    timeline.add( this._makeTween(el, effect, options), position, options.align );
                 }
-            }             
+            }
         }
-        
+
         if ( tweens.length )
         {
-            timeline.add(tweens, "+=0", timelineOptions.align, timelineOptions.stagger);
+            timeline.add( tweens, "+=0", timelineOptions.align, timelineOptions.stagger );
         }
-        
+
         if ( timelineOptions.scale )
         {
             timeline.timeScale(timelineOptions.scale);
@@ -456,12 +455,12 @@ export class GreensockAnimator
         else
         if ( timelineOptions.duration )
         {
-            timeline.duration(timelineOptions.duration);
+            timeline.duration( timelineOptions.duration );
         }
 
         timeline.paused(requestedPause);
         timelineOptions.paused = requestedPause;    /* restore paused state. */
-        
+
         return timeline;
     }
 
@@ -470,7 +469,7 @@ export class GreensockAnimator
      * @param sequence array of animations
      * @return this instance for chaining
      */
-    stopSequence(sequence) 
+    stopSequence( sequence )
     {
         sequence.forEach( item => { 
             let el = item.e || item.element || item.elements;
@@ -482,27 +481,27 @@ export class GreensockAnimator
             this.sequenceReject();
             this.sequenceReject = undefined;
         }
-        
-        this._triggerDOMEvent(animationEvent.sequenceDone);
+
+        this._triggerDOMEvent( animationEvent.sequenceDone );
         return this;
     }
 
     /**
      * Util for adding/removing classes
      */
-    _modClass(element, className, mode, method)
+    _modClass( element, className, mode, method )
     {
-        this._triggerDOMEvent(animationEvent[mode + 'ClassBegin'], element);
-        this._triggerDOMEvent(animationEvent[mode + 'ClassActive'], element);
-        
+        this._triggerDOMEvent( animationEvent[mode + 'ClassBegin'], element );
+        this._triggerDOMEvent( animationEvent[mode + 'ClassActive'], element );
+
         return new Promise( (resolve) => {
-            TweenMax.to(element, 0, // to trigger onStart duration needs to be > 0 
+            TweenMax.to(element, 0, // to trigger onStart duration needs to be > 0
                 {
                     className: method+className,
                     //onStart: () => { this._triggerDOMEvent(animationEvent[mode + 'ClassActive'], element); }, 
                     onComplete: () => {
-                        this._triggerDOMEvent(animationEvent[mode + 'ClassDone'], element);
-                        resolve(true); 
+                        this._triggerDOMEvent( animationEvent[mode + 'ClassDone'], element );
+                        resolve(true);
                     }
                 });
         });
@@ -514,9 +513,9 @@ export class GreensockAnimator
      * @param className Properties to animate or name of the effect to use
      * @returns Resolved when the animation is done
      */
-    removeClass(element, className) 
+    removeClass( element, className )
     {
-        return this._modClass(element, className, 'remove','-=');
+        return this._modClass( element, className, 'remove','-=' );
     }
 
     /**
@@ -525,7 +524,7 @@ export class GreensockAnimator
      * @param className Properties to animate or name of the effect to use
      * @returns Resolved when the animation is done
      */
-    addClass(element, className) 
+    addClass( element, className )
     {
         return this._modClass(element, className, 'add', '+=');
     }
@@ -535,7 +534,7 @@ export class GreensockAnimator
      * @param element Element to animate
      * @return resolved when animation is complete
      */
-    enter(element, effectName = 'enter', options = {}) 
+    enter( element, effectName = 'enter', options = {} )
     {
         return this._runElementAnimation(element, effectName, options, 'enter');
     }
@@ -545,7 +544,7 @@ export class GreensockAnimator
      * @param element Element to animate
      * @returns resolved when animation is complete
      */
-    leave(element, effectName = 'leave', options = {}) 
+    leave( element, effectName = 'leave', options = {} )
     {
         return this._runElementAnimation(element, effectName, options, 'leave');
     }
@@ -562,21 +561,21 @@ export class GreensockAnimator
     *
     * @returns {Promise} resolved when animation is complete
     */
-    _reOnStart(element, eventName, onStart, onStartParams, onStartScope ) 
+    _reOnStart( element, eventName, onStart, onStartParams, onStartScope )
     {
         if ( eventName ) { this._triggerDOMEvent(animationEvent[eventName + 'Active'], element); }
-        if ( typeof onStart === 'function' ) { onStart.apply(onStartScope || this, onStartParams); }  
+        if ( typeof onStart === 'function' ) { onStart.apply(onStartScope || this, onStartParams); }
     }
-    _reOnComplete(element, eventName, onComplete, onCompleteParams, onCompleteScope)
+    
+    _reOnComplete( element, eventName, onComplete, onCompleteParams, onCompleteScope )
     {
         this.isAnimating = false;
-        
+
         if ( eventName ) { this._triggerDOMEvent(animationEvent[eventName + 'Done'], element); }
         if ( typeof onComplete === 'function' ) { onComplete.apply(onCompleteScope || this, onCompleteParams); }
-        
         return true;
     }
-    _runElementAnimation(element, name, options, eventName = '') 
+    _runElementAnimation (element, name, options, eventName = '' )
     {
         if (!element || element.length === 0) { return Promise.resolve(element); }
         let _options = Object.assign({}, options);
@@ -588,9 +587,9 @@ export class GreensockAnimator
             let elem_pos = Array.prototype.indexOf.call(parent.children, element);
             let stagger = parent.getAttribute('au-stagger');
             if ( stagger === null || stagger === '' ) { stagger = this.defaultStagger; }
-            
+
             _options.delay = delay + (+stagger * elem_pos);
-            
+
             this._triggerDOMEvent(animationEvent.staggerNext, element);
         }
 
@@ -598,15 +597,15 @@ export class GreensockAnimator
         this._parseAttributes(element, eventName);
 
         if (eventName) { this._triggerDOMEvent(animationEvent[eventName + 'Begin']); }
-        
+
         _options.onStartParams = [element, eventName, _options.onStart, _options.onStartParams, _options.onStartScope];
         _options.onStartScope = this;
         _options.onStart = this._reOnStart;
-        
+
         _options.onCompleteParams = [element, eventName, _options.onComplete, _options.onCompleteParams, _options.onCompleteScope];
         _options.onCompleteScope = this;
         _options.onComplete = this._reOnComplete;
-        
+
         return this.animate(element, element.animations[eventName] || name, _options, true );
     }
 
@@ -616,10 +615,10 @@ export class GreensockAnimator
      *
     * @param element {HTMLElement|Array<HTMLElement>}   Element(s) to parse
     */
-    _parseAttributes( element, eventName ) 
+    _parseAttributes( element, eventName )
     {
         let el, i, l, eventAnim;
-        
+
         element = this._ensureList(element);
         for (i = 0, l = element.length; i < l; i++) 
         {
@@ -646,7 +645,7 @@ export class GreensockAnimator
     * @param value           Attribute value
     * @returns {Object}      Object with the effectName/properties and options that have been extracted
     */
-    _parseAttributeValue(value) 
+    _parseAttributeValue( value ) 
     {
         if (!value) 
         {
@@ -677,20 +676,20 @@ export class GreensockAnimator
             else {  /* effect/sequence name */
                 option = p_i; /* save name, resolve later. */
             }
-            
+
             if ( option ) { sequence.push(option); }
         }
 
         if ( !sequence.length ) { return null; }
         if ( sequence.length === 1 ) { return sequence[0]; } /* single animation */
-        
+
         return sequence;
     }
 
     /**
      * Turn an element into an array of elements if it's not an array yet or a Nodelist
      */
-    _ensureList(element) 
+    _ensureList( element )
     {
         return  (!(element instanceof Array) && !(element instanceof NodeList)) ? [element] : element;
     }

@@ -1,3 +1,8 @@
+### 1.0.0-beta.5 (2016-04-17)
+
+* **all:** Update babel and build files. Remove unnecessary dependencies. lint
+
+
 ## 1.0.0-Beta.4 (2016-02-25)
 
 ### Bug Fixes

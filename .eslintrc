@@ -1,3 +1,12 @@
 {
-  "extends": "./node_modules/aurelia-tools/.eslintrc"
+  "extends": "./node_modules/aurelia-tools/.eslintrc",
+  "rules": {
+    
+    "no-use-before-define": 2,
+    
+    "indent": [2, 4],                // http://eslint.org/docs/rules/indent
+    "brace-style": [2, "allman", { "allowSingleLine": true } ],
+    "space-before-function-paren": [2, "never"],
+    "space-before-blocks": [2, "always"]
+  }
 }
