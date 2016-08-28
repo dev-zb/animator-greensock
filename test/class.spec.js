@@ -4,6 +4,12 @@ import {initialize} from 'aurelia-pal-browser';
 
 jasmine.getFixtures().fixturesPath = 'base/test/fixtures/';
 
+function getElement( qry )
+{
+  return document.querySelector(qry);
+}
+
+
 describe('animator-greensock', () => {
   let elem;
   let animator;
@@ -14,14 +20,14 @@ describe('animator-greensock', () => {
   beforeEach(() => {
     //stop all animations running on the test element
     if (animator) animator.stop(elem, true);
-    container = $('#animation').eq(0)[0];
+    container = getElement('#animation');
     animator = new GreensockAnimator(container);
   });
 
   describe('addClass function', () => {
     beforeEach(() => {
       loadFixtures('class.html');
-      elem = $('.remove-class').eq(0)[0];
+      elem = getElement('.remove-class');
       animator.stop(elem, true);
     });
 
@@ -69,7 +75,7 @@ describe('animator-greensock', () => {
   describe('removeClass function', () => {
     beforeEach(() => {
       loadFixtures('class.html');
-      elem = $('.remove-class').eq(0)[0];
+      elem = getElement('.remove-class');
       animator.stop(elem, true);
     });
 

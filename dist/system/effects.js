@@ -1,6 +1,8 @@
 'use strict';
 
 System.register(['greensock'], function (_export, _context) {
+    "use strict";
+
     var extendedEffects;
     return {
         setters: [function (_greensock) {}],

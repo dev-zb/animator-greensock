@@ -3,6 +3,11 @@ import {initialize} from 'aurelia-pal-browser';
 
 jasmine.getFixtures().fixturesPath = 'base/test/fixtures/';
 
+function getElement( qry )
+{
+  return document.querySelector(qry);
+}
+
 describe('GreensockAnimator', () => {
   let animator;
   let container;
@@ -12,7 +17,7 @@ describe('GreensockAnimator', () => {
   beforeEach(() => {
     //stop all animations running on the test element
     loadFixtures('register.html');
-    container = $('div').eq(0)[0];
+    container = getElement('div');
     animator = new GreensockAnimator(container);
   });
 

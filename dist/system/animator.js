@@ -1,6 +1,8 @@
 'use strict';
 
 System.register(['aurelia-templating', 'aurelia-pal', 'aurelia-binding', 'greensock', './effects'], function (_export, _context) {
+    "use strict";
+
     var animationEvent, DOM, Parser, extendedEffects, GreensockAnimator;
 
     function _classCallCheck(instance, Constructor) {
@@ -552,8 +554,8 @@ System.register(['aurelia-templating', 'aurelia-pal', 'aurelia-binding', 'greens
                         if (p_i[0] === '{') {
                                 option = this.parser.parse(p_i).evaluate();
                             } else {
-                                option = p_i;
-                            }
+                            option = p_i;
+                        }
 
                         if (option) {
                             sequence.push(option);

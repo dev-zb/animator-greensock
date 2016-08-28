@@ -4,6 +4,11 @@ import {initialize} from 'aurelia-pal-browser';
 
 jasmine.getFixtures().fixturesPath = 'base/test/fixtures/';
 
+function getElement( qry )
+{
+  return document.querySelector(qry);
+}
+
 describe('animator-greensock', () => {
   let animator;
   let container;
@@ -16,7 +21,7 @@ describe('animator-greensock', () => {
     if (animator) animator.stop(elem, true);
 
     loadFixtures('animation.html');
-    container = $('#animation').eq(0)[0];
+    container = getElement('#animation');
 
     animator = new GreensockAnimator(container);
   });
@@ -24,7 +29,7 @@ describe('animator-greensock', () => {
   describe('staggering', () => {
     beforeEach(() => {
       loadFixtures('animation.html');
-      elem = $('#test-simple').eq(0)[0];
+      elem = getElement('#test-simple');
       animator.stop(elem, true);
     });
 
@@ -90,7 +95,7 @@ describe('animator-greensock', () => {
       let eventCalled = false;
 
       let listener = document.addEventListener(animationEvent.animateDone, () => eventCalled = true);
-      elem = $('#test-stagger').eq(0)[0].children;
+      elem = getElement('#test-stagger').children;
 
       animator.animate(elem, 'fade-in', {stagger: .05}).then(() => {
         expect(eventCalled).toBe(true);

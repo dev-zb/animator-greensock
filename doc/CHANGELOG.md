@@ -1,3 +1,8 @@
+### 1.0.0 (2016-08-28)
+
+* Update aurelia dependencies to 1.0.0
+* Update build dependencies
+
 ### 1.0.0-beta.6 (2016-04-17)
 
 #### Bug Fixes

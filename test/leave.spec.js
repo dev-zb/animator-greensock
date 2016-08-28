@@ -4,6 +4,11 @@ import {initialize} from 'aurelia-pal-browser';
 
 jasmine.getFixtures().fixturesPath = 'base/test/fixtures/';
 
+function getElement( qry )
+{
+  return document.querySelector(qry);
+}
+
 describe('animator-greensock', () => {
   let elem;
   let animator;
@@ -16,14 +21,14 @@ describe('animator-greensock', () => {
     if (animator) animator.stop(elem, true);
 
     loadFixtures('animation.html');
-    container = $('#animation').eq(0)[0];
+    container = getElement('#animation');
     animator = new GreensockAnimator(container);
   });
 
   describe('leave function', () => {
     beforeEach(() => {
       loadFixtures('animation.html');
-      elem = $('#test-simple').eq(0)[0];
+      elem = getElement('#test-simple');
       animator.stop(elem, true);
     });
 

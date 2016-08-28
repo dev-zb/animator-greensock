@@ -544,8 +544,8 @@ define(['exports', 'aurelia-templating', 'aurelia-pal', 'aurelia-binding', './ef
                 if (p_i[0] === '{') {
                         option = this.parser.parse(p_i).evaluate();
                     } else {
-                        option = p_i;
-                    }
+                    option = p_i;
+                }
 
                 if (option) {
                     sequence.push(option);
