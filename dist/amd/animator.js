@@ -1,4 +1,4 @@
-define(['exports', 'aurelia-templating', 'aurelia-pal', 'aurelia-binding', './effects', 'greensock'], function (exports, _aureliaTemplating, _aureliaPal, _aureliaBinding, _effects) {
+define(['exports', 'aurelia-templating', 'aurelia-pal', 'aurelia-binding', './effects', 'gsap'], function (exports, _aureliaTemplating, _aureliaPal, _aureliaBinding, _effects) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {

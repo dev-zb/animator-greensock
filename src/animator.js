@@ -2,7 +2,7 @@ import { animationEvent } from 'aurelia-templating';
 import {DOM} from 'aurelia-pal';
 import {Parser} from 'aurelia-binding';
 
-import 'greensock';
+import 'gsap';
 import {extendedEffects} from './effects';
 /**
  * An implementation of the Animator using Greensock.

@@ -11,7 +11,7 @@ var _aureliaPal = require('aurelia-pal');
 
 var _aureliaBinding = require('aurelia-binding');
 
-require('greensock');
+require('gsap');
 
 var _effects = require('./effects');
 

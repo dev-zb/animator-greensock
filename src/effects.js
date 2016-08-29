@@ -1,4 +1,4 @@
-import 'greensock';
+import 'gsap';
 
 let extendedEffects = new Map([
                     ['reset-rot', { set: { transformOrigin: 'center center', rotationX: 0, rotationY: 0, rotationZ: 0 }}],

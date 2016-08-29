@@ -1,3 +1,6 @@
+### 1.0.1 (2016-08-29)
+* Fix gsap dependency
+
 ### 1.0.0 (2016-08-28)
 
 * Update aurelia dependencies to 1.0.0

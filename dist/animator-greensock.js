@@ -1,4 +1,4 @@
-import 'greensock';
+import 'gsap';
 import {animationEvent,TemplatingEngine} from 'aurelia-templating';
 import {DOM} from 'aurelia-pal';
 import {Parser} from 'aurelia-binding';

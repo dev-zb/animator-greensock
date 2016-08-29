@@ -1,4 +1,4 @@
-define(['exports', 'greensock'], function (exports) {
+define(['exports', 'gsap'], function (exports) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {

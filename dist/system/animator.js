@@ -1,6 +1,6 @@
 'use strict';
 
-System.register(['aurelia-templating', 'aurelia-pal', 'aurelia-binding', 'greensock', './effects'], function (_export, _context) {
+System.register(['aurelia-templating', 'aurelia-pal', 'aurelia-binding', 'gsap', './effects'], function (_export, _context) {
     "use strict";
 
     var animationEvent, DOM, Parser, extendedEffects, GreensockAnimator;
@@ -18,7 +18,7 @@ System.register(['aurelia-templating', 'aurelia-pal', 'aurelia-binding', 'greens
             DOM = _aureliaPal.DOM;
         }, function (_aureliaBinding) {
             Parser = _aureliaBinding.Parser;
-        }, function (_greensock) {}, function (_effects) {
+        }, function (_gsap) {}, function (_effects) {
             extendedEffects = _effects.extendedEffects;
         }],
         execute: function () {
