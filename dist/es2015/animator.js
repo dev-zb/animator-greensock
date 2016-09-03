@@ -214,20 +214,18 @@ export let GreensockAnimator = class GreensockAnimator {
     }
 
     resolveEffectDeep(effect) {
-        let options = {};
-        effect = this._modifiedEffect(this.resolveEffect(effect, true), options);
-
-        return [effect, options];
+        return this._modifiedEffect(this.resolveEffect(effect, true));
     }
 
-    _modifiedEffect(effect, options) {
+    _modifiedEffect(effect) {
+        let options = {};
         while (effect.effect) {
             Object.assign(options, effect);
             delete options.effect;
 
-            effect = this.resolveEffect(effect.effect, true);
+            effect = Object.assign(this.resolveEffect(effect.effect, true), options);
         }
-        return effect;
+        return [effect, options];
     }
 
     runSequence(sequence, element, options = {}, sequenceOptions = {}) {

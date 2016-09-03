@@ -1,3 +1,6 @@
+### 1.0.2 (2016-09-03)
+* Fix resolveEffect not applying override options
+
 ### 1.0.1 (2016-08-29)
 * Fix gsap dependency
 

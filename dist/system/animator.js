@@ -251,20 +251,18 @@ System.register(['aurelia-templating', 'aurelia-pal', 'aurelia-binding', 'gsap',
                 };
 
                 GreensockAnimator.prototype.resolveEffectDeep = function resolveEffectDeep(effect) {
-                    var options = {};
-                    effect = this._modifiedEffect(this.resolveEffect(effect, true), options);
-
-                    return [effect, options];
+                    return this._modifiedEffect(this.resolveEffect(effect, true));
                 };
 
-                GreensockAnimator.prototype._modifiedEffect = function _modifiedEffect(effect, options) {
+                GreensockAnimator.prototype._modifiedEffect = function _modifiedEffect(effect) {
+                    var options = {};
                     while (effect.effect) {
                         Object.assign(options, effect);
                         delete options.effect;
 
-                        effect = this.resolveEffect(effect.effect, true);
+                        effect = Object.assign(this.resolveEffect(effect.effect, true), options);
                     }
-                    return effect;
+                    return [effect, options];
                 };
 
                 GreensockAnimator.prototype.runSequence = function runSequence(sequence, element) {
