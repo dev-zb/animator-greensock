@@ -92,7 +92,8 @@ export class GreensockAnimator
                 let sequenceOptions = this._filterSequenceOptions(_options);
                 this.runSequence(effect, element, _options, sequenceOptions);
             }
-            else {
+            else
+            {
                 this._makeTween(element, effect, _options );
             }
         });
@@ -191,7 +192,8 @@ export class GreensockAnimator
         {
             return TweenMax.set(element, set );
         }
-        else {
+        else
+        {
             props.delay = delay;
             props = Object.assign({}, this.defaults, props); 
             return TweenMax.staggerFrom(element, this._duration(duration, this.defaults.duration), props, props.stagger, completeAll, completeAllParams, this);
@@ -301,10 +303,10 @@ export class GreensockAnimator
      */
     resolveEffectDeep( effect )
     {
-        let options = {};
-        effect = this._modifiedEffect( this.resolveEffect( effect, true), options );
+        //let options = {};
+        return  this._modifiedEffect( this.resolveEffect( effect, true) );//, options );
 
-        return [effect, options];
+        //return [effect, options];
     }
 
     /**
@@ -313,16 +315,17 @@ export class GreensockAnimator
      * @param options [warn] will be modified with the properties of effect
      * @return effect modified or unmodified. 
      */
-    _modifiedEffect( effect, options )
+    _modifiedEffect( effect )
     {
+        let options = {};
         while( effect.effect )
         {   
             Object.assign(options, effect);
             delete options.effect;
 
-            effect = this.resolveEffect(effect.effect, true);
+            effect = Object.assign(this.resolveEffect(effect.effect, true), options);
         }
-        return effect;
+        return [effect,options];
     }
 
     /**
